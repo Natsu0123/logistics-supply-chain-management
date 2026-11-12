@@ -1,0 +1,3 @@
+document.querySelector('#add-item')?.addEventListener('click',()=>{const items=document.querySelector('#items');if(items.children.length>=20)return;const row=items.firstElementChild.cloneNode(true);row.querySelector('input[name="quantity"]').value=1;items.append(row)});
+document.querySelector('#items')?.addEventListener('click',event=>{if(event.target.classList.contains('remove')){const items=document.querySelector('#items');if(items.children.length>1)event.target.closest('.item').remove()}});
+document.querySelectorAll('form[data-confirm]').forEach(form=>form.addEventListener('submit',event=>{if(!confirm(form.dataset.confirm))event.preventDefault()}));

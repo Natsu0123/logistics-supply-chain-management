@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS suppliers(id INTEGER PRIMARY KEY, name TEXT NOT NULL UNIQUE, phone TEXT NOT NULL DEFAULT '', city TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY, sku TEXT NOT NULL UNIQUE, name TEXT NOT NULL, supplier_id INTEGER NOT NULL REFERENCES suppliers(id), price INTEGER NOT NULL CHECK(price>=0), stock INTEGER NOT NULL DEFAULT 0 CHECK(stock>=0), minimum INTEGER NOT NULL DEFAULT 5 CHECK(minimum>=0));
+CREATE TABLE IF NOT EXISTS orders(id INTEGER PRIMARY KEY, customer TEXT NOT NULL, destination TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'Yangi' CHECK(status IN ('Yangi','Yolda','Yetkazildi','Bekor qilindi')), created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%d %H:%M','now')));
+CREATE TABLE IF NOT EXISTS order_items(id INTEGER PRIMARY KEY, order_id INTEGER NOT NULL REFERENCES orders(id), product_id INTEGER NOT NULL REFERENCES products(id), quantity INTEGER NOT NULL CHECK(quantity>0), unit_price INTEGER NOT NULL CHECK(unit_price>=0));
+CREATE TABLE IF NOT EXISTS shipments(id INTEGER PRIMARY KEY, order_id INTEGER NOT NULL UNIQUE REFERENCES orders(id), driver TEXT NOT NULL, vehicle TEXT NOT NULL, departed_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%d %H:%M','now')), delivered_at TEXT);
+CREATE TABLE IF NOT EXISTS stock_movements(id INTEGER PRIMARY KEY, product_id INTEGER NOT NULL REFERENCES products(id), order_id INTEGER REFERENCES orders(id), quantity INTEGER NOT NULL CHECK(quantity<>0), reason TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%d %H:%M','now')));
+CREATE INDEX IF NOT EXISTS ix_order_items_order ON order_items(order_id);
+CREATE INDEX IF NOT EXISTS ix_movements_product ON stock_movements(product_id);

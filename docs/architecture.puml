@@ -1,0 +1,23 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+top to bottom direction
+actor Administrator
+node Browser {
+  component "HTML CSS JavaScript" as UI
+}
+node "Google Compute Engine" {
+  component "Caddy HTTPS" as Proxy
+  component "Gunicorn and Flask" as App
+  component "Jinja templates" as Templates
+  component "Validation and stock transactions" as Logic
+  database "SQLite on persistent disk" as DB
+}
+Administrator --> UI
+UI --> Proxy : HTTPS forms and GET
+Proxy --> App : HTTP private Docker network
+App --> Templates : render
+App --> Logic : actions
+Logic --> DB : parameterized SQL
+Templates --> UI : HTML response
+@enduml

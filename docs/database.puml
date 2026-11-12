@@ -1,0 +1,62 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+hide circle
+entity suppliers {
+  * id : INTEGER <<PK>>
+  --
+  * name : TEXT <<UNIQUE>>
+  * phone : TEXT
+  * city : TEXT
+}
+entity products {
+  * id : INTEGER <<PK>>
+  --
+  * sku : TEXT <<UNIQUE>>
+  * name : TEXT
+  * supplier_id : INTEGER <<FK>>
+  * price : INTEGER
+  * stock : INTEGER
+  * minimum : INTEGER
+}
+entity orders {
+  * id : INTEGER <<PK>>
+  --
+  * customer : TEXT
+  * destination : TEXT
+  * status : TEXT
+  * created_at : TEXT
+}
+entity order_items {
+  * id : INTEGER <<PK>>
+  --
+  * order_id : INTEGER <<FK>>
+  * product_id : INTEGER <<FK>>
+  * quantity : INTEGER
+  * unit_price : INTEGER
+}
+entity shipments {
+  * id : INTEGER <<PK>>
+  --
+  * order_id : INTEGER <<FK UNIQUE>>
+  * driver : TEXT
+  * vehicle : TEXT
+  * departed_at : TEXT
+  delivered_at : TEXT
+}
+entity stock_movements {
+  * id : INTEGER <<PK>>
+  --
+  * product_id : INTEGER <<FK>>
+  order_id : INTEGER <<FK>>
+  * quantity : INTEGER
+  * reason : TEXT
+  * created_at : TEXT
+}
+suppliers ||--o{ products
+products ||--o{ order_items
+orders ||--|{ order_items
+orders ||--o| shipments
+products ||--o{ stock_movements
+orders |o--o{ stock_movements
+@enduml

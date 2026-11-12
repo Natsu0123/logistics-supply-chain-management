@@ -1,0 +1,10 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+[*] --> Yangi : stock allocated
+Yangi --> Yolda : driver and vehicle saved
+Yangi --> Cancelled : stock returned
+Yolda --> Yetkazildi : delivery time saved
+Yetkazildi --> [*]
+Cancelled --> [*]
+@enduml
